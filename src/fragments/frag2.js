@@ -4,14 +4,31 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
+  useDerivedValue,
+  useAnimatedSensor,
+  SensorType,
 } from 'react-native-reanimated';
 
 export default function Frag2(props) {
   const animLeftMargin = useSharedValue(10);
   const animTopMargin = useSharedValue(10);
+  const boarderRadius = useDerivedValue(
+    () => 200 - animLeftMargin.value,
+    [animLeftMargin],
+  );
+
+  const animatedSensor = useAnimatedSensor(SensorType.ACCELEROMETER, {
+    interval: 10,
+  });
 
   const animatedStyles = useAnimatedStyle(() => {
-    return {marginLeft: animLeftMargin.value, marginTop: animTopMargin.value};
+    const height = animatedSensor.sensor.value.z * 10;
+    return {
+      height: withTiming(height, {duration: 10}),
+      marginLeft: animLeftMargin.value,
+      marginTop: animTopMargin.value,
+      borderRadius: boarderRadius.value,
+    };
   });
 
   const styles = StyleSheet.create({

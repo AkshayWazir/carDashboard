@@ -4,6 +4,7 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
+  runOnUI,
 } from 'react-native-reanimated';
 
 function animateTO(property, targetValue) {
